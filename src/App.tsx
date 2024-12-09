@@ -10,10 +10,10 @@ import Maintenance from './pages/Maintenance';
 import Quotation from './pages/Quotation';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
+import DatabaseManagement from './pages/DatabaseManagement'; // 导入数据库管理组件
 
 // 简单的认证检查
 const isAuthenticated = () => {
-  // 这里添加实际的认证检查逻辑
   return localStorage.getItem('token') !== null; // 假设你使用 token 进行身份验证
 };
 
@@ -41,7 +41,6 @@ function LoginWrapper() {
   const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
-    // 登录成功后导航到仪表盘
     navigate('/');
   };
 
@@ -52,7 +51,16 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginWrapper />} />
+        <Route
+          path="/login"
+          element={
+            isAuthenticated() ? (
+              <Navigate to="/" replace />
+            ) : (
+              <LoginWrapper />
+            )
+          }
+        />
         <Route
           path="/"
           element={
@@ -63,6 +71,14 @@ function App() {
             ) : (
               <Navigate to="/login" replace />
             )
+          }
+        />
+        <Route
+          path="/database-management" // 新增数据库管理路由
+          element={
+            <ProtectedLayout>
+              <DatabaseManagement />
+            </ProtectedLayout>
           }
         />
         <Route
