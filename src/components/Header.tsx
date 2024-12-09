@@ -2,13 +2,14 @@ import React from 'react';
 import { Bell, User } from 'lucide-react';
 
 export default function Header() {
+  // 从 localStorage 获取用户信息
+  const accountType = JSON.parse(localStorage.getItem('user') || '{}').accountType || '访客'; // 默认账号类型
+
   return (
     <header className="h-16 bg-white border-b fixed top-0 right-0 left-64 z-10">
       <div className="h-full px-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-semibold text-gray-800">
-            欢迎回来，管理员
-          </h2>
+          {/* 删除用户名显示 */}
         </div>
         
         <div className="flex items-center gap-4">
@@ -22,8 +23,7 @@ export default function Header() {
               <User size={20} />
             </div>
             <div className="text-sm">
-              <p className="font-medium">张工程师</p>
-              <p className="text-gray-500">系统管理员</p>
+              <p className="text-gray-500">{accountType}</p> {/* 显示账号类型 */}
             </div>
           </div>
         </div>

@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, FileText, Download } from 'lucide-react';
+import { Plus, Download } from 'lucide-react';
 import DataTable from '../components/DataTable';
-
-interface ProjectType {
-  id: number;
-  name: string;
-}
 
 interface QuotationItem {
   itemType: 'equipment' | 'material' | 'spare_part';
@@ -22,23 +17,51 @@ interface Quotation {
   projectName: string;
   projectType: string;
   diameter: number;
+  tunnelLength: number; // 新增隧道长度字段
   totalAmount: number;
   status: string;
   createdAt: string;
 }
 
 export default function Quotation() {
-  const [projectTypes, setProjectTypes] = useState<ProjectType[]>([]);
   const [selectedType, setSelectedType] = useState('');
+  const [selectedCustomer, setSelectedCustomer] = useState('');
+  const [customers, setCustomers] = useState<string[]>([]);
   const [diameter, setDiameter] = useState('');
-  const [projectName, setProjectName] = useState('');
+  const [tunnelLength, setTunnelLength] = useState(''); // 新增状态变量
   const [items, setItems] = useState<QuotationItem[]>([]);
-  const [quotations, setQuotations] = useState<Quotation[]>([]);
+  const [quotations] = useState<Quotation[]>([]);
   const [showForm, setShowForm] = useState(false);
 
-  // 获取项目类型
+  // 获取客户信息
   useEffect(() => {
-    // TODO: 从API获取项目类型列表
+    const fetchProjects = async () => {
+      try {
+        const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3006';
+        const url = `${baseUrl}/api/customer/projects`;
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+        });
+        
+        if (!response.ok) {
+          throw new Error('获取项目列表失败');
+        }
+
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          const projectNames = [...new Set(data.map(item => item.col_2_2))].filter(Boolean);
+          setCustomers(projectNames);
+        }
+      } catch {
+        console.error('获取项目列表失败');
+      }
+    };
+
+    fetchProjects();
   }, []);
 
   // 获取推荐配置
@@ -65,13 +88,13 @@ export default function Quotation() {
   };
 
   // 更新物品
-  const handleUpdateItem = (index: number, field: keyof QuotationItem, value: any) => {
+  const handleUpdateItem = (index: number, field: keyof QuotationItem, value: string | number) => {
     const newItems = [...items];
     newItems[index] = {
       ...newItems[index],
       [field]: value,
       totalPrice: field === 'quantity' || field === 'unitPrice'
-        ? value * (field === 'quantity' ? items[index].unitPrice : items[index].quantity)
+        ? Number(value) * (field === 'quantity' ? items[index].unitPrice : items[index].quantity)
         : items[index].totalPrice
     };
     setItems(newItems);
@@ -83,7 +106,7 @@ export default function Quotation() {
   };
 
   // 导出报价单
-  const handleExportQuotation = (id: number) => {
+  const handleExportQuotation = () => {
     // TODO: 导出报价单为PDF
   };
 
@@ -91,6 +114,7 @@ export default function Quotation() {
     { header: '项目名称', accessor: 'projectName' as keyof Quotation },
     { header: '项目类型', accessor: 'projectType' as keyof Quotation },
     { header: '直径(m)', accessor: 'diameter' as keyof Quotation },
+    { header: '隧道长度(m)', accessor: 'tunnelLength' as keyof Quotation }, // 新增隧道长度列
     {
       header: '总金额',
       accessor: 'totalAmount' as keyof Quotation,
@@ -114,9 +138,9 @@ export default function Quotation() {
     {
       header: '操作',
       accessor: 'id' as keyof Quotation,
-      render: (value: number) => (
+      render: () => (
         <button
-          onClick={() => handleExportQuotation(value)}
+          onClick={handleExportQuotation}
           className="text-blue-600 hover:text-blue-800"
         >
           <Download size={20} />
@@ -145,12 +169,16 @@ export default function Quotation() {
               <label className="block text-sm font-medium text-gray-700">
                 项目名称
               </label>
-              <input
-                type="text"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
+              <select
+                value={selectedCustomer}
+                onChange={(e) => setSelectedCustomer(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              />
+              >
+                <option value="">请选择项目</option>
+                {customers.map((customer, index) => (
+                  <option key={index} value={customer}>{customer}</option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -162,9 +190,8 @@ export default function Quotation() {
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
               >
                 <option value="">请选择项目类型</option>
-                {projectTypes.map(type => (
-                  <option key={type.id} value={type.id}>{type.name}</option>
-                ))}
+                <option value="泥水平衡盾构">泥水平衡盾构</option>
+                <option value="土压平衡盾构">土压平衡盾构</option>
               </select>
             </div>
             <div>
@@ -175,6 +202,17 @@ export default function Quotation() {
                 type="number"
                 value={diameter}
                 onChange={(e) => setDiameter(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                隧道长度(m) {/* 新增隧道长度输入框 */}
+              </label>
+              <input
+                type="number"
+                value={tunnelLength}
+                onChange={(e) => setTunnelLength(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
               />
             </div>

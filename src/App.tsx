@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -18,14 +18,14 @@ const isAuthenticated = () => {
 };
 
 // 受保护的路由组件
-function ProtectedLayout({ children }: { children: React.ReactNode }) {
+function ProtectedLayout({ children, setPageTitle }: { children: React.ReactNode; setPageTitle: (title: string) => void; }) {
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
+      <Sidebar setPageTitle={setPageTitle} /> {/* 传递 setPageTitle */}
       <div className="flex-1 ml-64">
         <Header />
         <main className="mt-16 p-6">
@@ -48,6 +48,12 @@ function LoginWrapper() {
 }
 
 function App() {
+  const [pageTitle, setPageTitle] = useState(''); // 新增状态变量
+
+  useEffect(() => {
+    document.title = pageTitle ? `设备维保事业部_${pageTitle}` : '设备维保事业部'; // 更新文档标题
+  }, [pageTitle]);
+
   return (
     <Router>
       <Routes>
@@ -65,7 +71,7 @@ function App() {
           path="/"
           element={
             isAuthenticated() ? (
-              <ProtectedLayout>
+              <ProtectedLayout setPageTitle={setPageTitle}>
                 <Dashboard />
               </ProtectedLayout>
             ) : (
@@ -76,7 +82,7 @@ function App() {
         <Route
           path="/database-management" // 新增数据库管理路由
           element={
-            <ProtectedLayout>
+            <ProtectedLayout setPageTitle={setPageTitle}>
               <DatabaseManagement />
             </ProtectedLayout>
           }
@@ -84,7 +90,7 @@ function App() {
         <Route
           path="/equipment"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout setPageTitle={setPageTitle}>
               <Equipment />
             </ProtectedLayout>
           }
@@ -92,7 +98,7 @@ function App() {
         <Route
           path="/materials"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout setPageTitle={setPageTitle}>
               <Materials />
             </ProtectedLayout>
           }
@@ -100,7 +106,7 @@ function App() {
         <Route
           path="/spare-parts"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout setPageTitle={setPageTitle}>
               <SpareParts />
             </ProtectedLayout>
           }
@@ -108,7 +114,7 @@ function App() {
         <Route
           path="/maintenance"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout setPageTitle={setPageTitle}>
               <Maintenance />
             </ProtectedLayout>
           }
@@ -116,7 +122,7 @@ function App() {
         <Route
           path="/quotation"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout setPageTitle={setPageTitle}>
               <Quotation />
             </ProtectedLayout>
           }
@@ -124,7 +130,7 @@ function App() {
         <Route
           path="/settings"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout setPageTitle={setPageTitle}>
               <Settings />
             </ProtectedLayout>
           }

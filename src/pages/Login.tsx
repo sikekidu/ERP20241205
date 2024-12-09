@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Shield } from 'lucide-react';
 
 // 定义登录数据类型
 interface LoginData {
@@ -63,7 +62,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
     setIsLoading(true); // 开始加载状态
 
     try {
-      const isAuthenticated = await authenticateUser (formData);
+      const isAuthenticated = await authenticateUser(formData);
       
       if (isAuthenticated) {
         // 登录成功，调用成功回调
@@ -85,9 +84,9 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
         <div className="text-center">
           <div className="flex justify-center">
-            <Shield className="h-12 w-12 text-blue-600" />
+            <img src="/steclogo.0d41a43.png" alt="Logo" className="h-20 w-40" /> {/* 调整图标大小 */}
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">盾构机ERP系统</h2>
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">设备维保事业部盾构机ERP系统</h2>
           <p className="mt-2 text-sm text-gray-600">请登录以继续操作</p>
         </div>
         

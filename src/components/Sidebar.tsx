@@ -6,7 +6,8 @@ import {
   Component,
   ClipboardList,
   Settings,
-  FileText
+  FileText,
+  Database // 导入数据库图标
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -18,15 +19,20 @@ const menuItems = [
   { icon: ClipboardList, label: '维护记录', path: '/maintenance' },
   { icon: FileText, label: '后配套报价', path: '/quotation' },
   { icon: Settings, label: '系统设置', path: '/settings' },
+  { icon: Database, label: '数据库管理', path: '/database-management' }, // 新增数据库管理栏目
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  setPageTitle: (title: string) => void; // 新增属性
+}
+
+export default function Sidebar({ setPageTitle }: SidebarProps) {
   const location = useLocation();
 
   return (
     <div className="w-64 h-screen bg-gray-900 text-white fixed left-0 top-0">
       <div className="p-4">
-        <h1 className="text-xl font-bold mb-8">盾构机ERP系统</h1>
+        <h1 className="text-xl font-bold mb-8">设备维保事业部</h1>
         <nav>
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -36,6 +42,7 @@ export default function Sidebar() {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={() => setPageTitle(item.label)} // 更新标题
                 className={`flex items-center gap-3 p-3 rounded-lg mb-2 transition-colors ${
                   isActive
                     ? 'bg-blue-600 text-white'
