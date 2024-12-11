@@ -6,9 +6,9 @@ interface LoginData {
   password: string;
 }
 
-// 定义组件Props
 interface LoginProps {
   onLoginSuccess: () => void; // 登录成功的回调函数
+  setPageTitle: (title: string) => void; // 添加 setPageTitle 属性
 }
 
 // 实际的API登录验证函数
@@ -65,8 +65,11 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       const isAuthenticated = await authenticateUser(formData);
       
       if (isAuthenticated) {
-        // 登录成功，调用成功回调
-        onLoginSuccess();
+      // 登录成功，调用成功回调并记录日志
+      console.log('Login successful, navigating to home...');
+        setTimeout(() => {
+          onLoginSuccess();
+        }, 100); // 添加短暂的延迟
       } else {
         // 登录失败，显示错误消息
         setError('用户名或密码错误');

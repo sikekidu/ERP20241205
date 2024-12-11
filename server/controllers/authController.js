@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
+import bcrypt from 'bcryptjs';
 import pool from '../config/database.js';
 
 // 验证登录数据
@@ -93,7 +94,8 @@ export const login = async (req, res) => {
     });
 
     // 验证密码
-    if (user.password !== password) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       console.warn(`Login failed: Invalid password for user - ${username}`);
       return res.status(401).json({ message: '用户名或密码错误' });
     }

@@ -37,14 +37,17 @@ function ProtectedLayout({ children, setPageTitle }: { children: React.ReactNode
 }
 
 // 包装Login组件以提供导航功能
-function LoginWrapper() {
+function LoginWrapper({ setPageTitle }: { setPageTitle: (title: string) => void; }) {
   const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
+    // 强制更新状态以确保路由更新
+    setPageTitle(''); // 触发状态更新
     navigate('/');
+    window.location.reload(); // 刷新页面
   };
 
-  return <Login onLoginSuccess={handleLoginSuccess} />;
+  return <Login onLoginSuccess={handleLoginSuccess} setPageTitle={setPageTitle} />;
 }
 
 function App() {
@@ -63,7 +66,7 @@ function App() {
             isAuthenticated() ? (
               <Navigate to="/" replace />
             ) : (
-              <LoginWrapper />
+              <LoginWrapper setPageTitle={setPageTitle} />
             )
           }
         />
