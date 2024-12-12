@@ -26,6 +26,7 @@ interface Quotation {
 export default function Quotation() {
   const [selectedType, setSelectedType] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [customers, setCustomers] = useState<string[]>([]);
   const [diameter, setDiameter] = useState('');
   const [tunnelLength, setTunnelLength] = useState(''); // 新增状态变量
@@ -169,16 +170,13 @@ export default function Quotation() {
               <label className="block text-sm font-medium text-gray-700">
                 项目名称
               </label>
-              <select
+              <input
+                type="text"
                 value={selectedCustomer}
                 onChange={(e) => setSelectedCustomer(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              >
-                <option value="">请选择项目</option>
-                {customers.map((customer, index) => (
-                  <option key={index} value={customer}>{customer}</option>
-                ))}
-              </select>
+                placeholder="请输入项目名称"
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
