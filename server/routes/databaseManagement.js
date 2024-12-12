@@ -21,14 +21,15 @@ function generateUniqueColumnName(originalName, index) {
 
 // 验证表名
 function validateTableName(tableName) {
-  const validTables = [
-    'goods_info',
-    'supplier_info',
-    'customer_info',
-    'order_info',
-    'inventory_info',
-    '后配套报价' // 添加后配套报价表名
-  ];
+const validTables = [
+  'goods_info',
+  'supplier_info',
+  'customer_info',
+  'order_info',
+  'inventory_info',
+  '后配套报价', // 添加后配套报价表名
+  'project_requirements' // 添加项目需求表名
+];
   return validTables.includes(tableName);
 }
 

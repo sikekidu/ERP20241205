@@ -7,14 +7,15 @@ const DatabaseManagement = () => {
   const [tableName, setTableName] = useState('');
 
   // 预定义的表名选项
-  const tableOptions = [
-    { value: 'goods_info', label: '货品信息表' },
-    { value: 'supplier_info', label: '供应商信息表' },
-    { value: 'customer_info', label: '客户信息表' },
-    { value: 'order_info', label: '订单信息表' },
-    { value: 'inventory_info', label: '库存信息表' },
-    { value: 'shield_machine_info', label: '盾构机设备表' }
-  ];
+const tableOptions = [
+  { value: 'goods_info', label: '货品信息表' },
+  { value: 'supplier_info', label: '供应商信息表' },
+  { value: 'customer_info', label: '客户信息表' },
+  { value: 'order_info', label: '订单信息表' },
+  { value: 'inventory_info', label: '库存信息表' },
+  { value: 'shield_machine_info', label: '盾构机设备表' },
+  { value: 'project_requirements', label: '土压平衡盾构项目需求表' }
+];
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
