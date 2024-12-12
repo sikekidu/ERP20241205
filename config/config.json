@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "silver222",
+    "database": "shield_tunnel_erp",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "silver222",
+    "database": "shield_tunnel_erp_test",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "silver222",
+    "database": "shield_tunnel_erp_production",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}

@@ -28,7 +28,8 @@ const validTables = [
   'order_info',
   'inventory_info',
   '后配套报价', // 添加后配套报价表名
-  'project_requirements' // 添加项目需求表名
+  'project_requirements', // 添加项目需求表名
+  'slurry_project_requirements' // 添加泥水平衡盾构项目需求表名
 ];
   return validTables.includes(tableName);
 }

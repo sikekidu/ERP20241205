@@ -14,7 +14,8 @@ const tableOptions = [
   { value: 'order_info', label: '订单信息表' },
   { value: 'inventory_info', label: '库存信息表' },
   { value: 'shield_machine_info', label: '盾构机设备表' },
-  { value: 'project_requirements', label: '土压平衡盾构项目需求表' }
+  { value: 'project_requirements', label: '土压平衡盾构项目需求表' },
+  { value: 'slurry_project_requirements', label: '泥水平衡盾构项目需求表' }
 ];
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

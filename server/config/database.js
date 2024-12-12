@@ -1,5 +1,6 @@
 import mysql from 'mysql2/promise'; // 使用 promise 版本
 import dotenv from 'dotenv';
+import { Sequelize } from 'sequelize'; // 导入 Sequelize
 
 // 加载环境变量
 dotenv.config();
@@ -11,6 +12,12 @@ requiredEnvVars.forEach(varName => {
     console.error(`Environment variable ${varName} is not defined`);
     process.exit(1);
   }
+});
+
+// 创建 Sequelize 实例
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: 'mysql' // 添加方言信息
 });
 
 // 创建数据库连接池
